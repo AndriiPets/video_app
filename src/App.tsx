@@ -5,6 +5,15 @@ import styled, { ThemeProvider } from 'styled-components';
 import Menu from './components/Menu';
 import Navbar from './components/Navbar';
 import { darkTheme,lightTheme, Theme } from './utils/Theme'
+import {
+  BrowserRouter,
+  createBrowserRouter,
+  Route,
+  RouterProvider,
+  Routes,
+} from "react-router-dom";
+import Home from './pages/Home';
+import Video from './pages/Video';
 
 const Container = styled.div`
   display: flex;
@@ -15,7 +24,9 @@ const Main = styled.div`
   background-color: ${({theme}) => theme.bgMain};
 `
 
-const Wrapper = styled.div``
+const Wrapper = styled.div`
+  padding: 22px 56px;
+`
 
 function App() {
 
@@ -24,13 +35,22 @@ function App() {
   return (
     <ThemeProvider theme={dark ? darkTheme : lightTheme}>
       <Container>
-        <Menu setDark={setDark} dark={dark} />
-        <Main>
-          <Navbar />
-          <Wrapper>
-            video cards
-          </Wrapper>
-        </Main>
+        <BrowserRouter>
+          <Menu setDark={setDark} dark={dark} />
+          <Main>
+            <Navbar />
+            <Wrapper>
+              <Routes>
+                <Route path='/'>
+                  <Route index element={<Home />} />
+                  <Route path='video'>
+                    <Route path=':id' element={<Video />} />
+                  </Route>
+                </Route>
+              </Routes>
+            </Wrapper>
+          </Main>
+        </BrowserRouter>
       </Container>
     </ThemeProvider>
   );
