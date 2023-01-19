@@ -20,6 +20,7 @@ import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightne
 import LightMode from "@mui/icons-material/LightMode"
 import DarkMode from "@mui/icons-material/DarkMode"
 import { Theme } from '../utils/Theme'
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
     flex:1;
@@ -76,9 +77,15 @@ const Item = styled.div`
     transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
     &:hover {
     background-color: ${({ theme }) => theme.soft};
+  }
+`
+const IconWrapper = styled.div`
+    margin-left: 10px;
+     &:hover {
     transform: scale(1.25);
   }
 `
+
 const Hr = styled.hr`
     margin: 15px 0px;
     border: 0.5px solid  ${({theme}) => theme.soft };
@@ -88,29 +95,41 @@ function Menu({setDark, dark}: {setDark:Dispatch<SetStateAction<boolean>>, dark:
   return (
     <Container>
       <Wrapper>
+        <Link to='/' style={{textDecoration: "none", color: "inherit"}}>
         <Logo>
             <Image src={logoImg} />
                 AstroTube
         </Logo>
+        </Link>
         <Item>
-            <HomeIcon />
+            <IconWrapper>
+                <HomeIcon />
+            </IconWrapper>
             Home
         </Item>
         <Item>
-          <ExploreOutlinedIcon />
+            <IconWrapper>
+                <ExploreOutlinedIcon />
+            </IconWrapper>    
           Explore
         </Item>
         <Item>
-          <SubscriptionsOutlinedIcon />
+            <IconWrapper>
+                <SubscriptionsOutlinedIcon />
+            </IconWrapper>
           Subscriptions
         </Item>
         <Hr/>
         <Item>
-          <VideoLibraryOutlinedIcon />
+            <IconWrapper>
+                <VideoLibraryOutlinedIcon />
+            </IconWrapper>
           Library
         </Item>
         <Item>
-          <HistoryOutlinedIcon />
+            <IconWrapper>
+                <HistoryOutlinedIcon />
+            </IconWrapper>
           History
         </Item>
         <Hr/>
@@ -145,22 +164,32 @@ function Menu({setDark, dark}: {setDark:Dispatch<SetStateAction<boolean>>, dark:
           Live
         </Item> */}
         <Item>
-          <SettingsOutlinedIcon />
+            <IconWrapper>
+                <SettingsOutlinedIcon />
+            </IconWrapper>
           Settings
         </Item>
         <Item>
-          <FlagOutlinedIcon />
+            <IconWrapper>
+                <FlagOutlinedIcon />
+            </IconWrapper>
           Report
         </Item>
         <Item>
-          <HelpOutlineOutlinedIcon />
+            <IconWrapper>
+                <HelpOutlineOutlinedIcon />
+            </IconWrapper>
           Help
         </Item>
         <Item onClick={() => setDark(!dark)}>
             {dark ? (
+                <IconWrapper>
                 <LightMode />
+                </IconWrapper>
             ) : (
+                <IconWrapper>
                 <DarkMode />
+                </IconWrapper>
             )}
             {dark ? "Light" : "Dark"} Mode
         </Item>
