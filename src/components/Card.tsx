@@ -43,8 +43,11 @@ const Info = styled.div`
     font-size: 14px;
     color: ${({theme}) => theme.textSoft};
 `
+interface CardProps {
+  type: string
+}
 
-function Card() {
+function Card({type}: CardProps) {
   return (
     <Link to='video/test' style={{textDecoration: "none"}}>
     <Container>
