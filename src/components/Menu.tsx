@@ -135,7 +135,12 @@ function Menu({setDark, dark}: {setDark:Dispatch<SetStateAction<boolean>>, dark:
         <Hr/>
         <Login>
             sign in to comment and subscribe!
-            <Button><AccountCircleOutlinedIcon/>SIGN IN</Button>
+            <Link to='signin' style={{textDecoration : 'none'}}>
+              <Button>
+                <AccountCircleOutlinedIcon/>
+                SIGN IN
+              </Button>
+            </Link>
         </Login>
         <Hr/>
         {/* <Hr/>
