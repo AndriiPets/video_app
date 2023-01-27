@@ -11,22 +11,18 @@ const Container = styled.div`
 function Home() {
   return (
     <Container>
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
+      <Card type='bg'/>
+      <Card type='bg'/>
+      <Card type='bg'/>
+      <Card type='bg'/>
+      <Card type='bg'/>
+      <Card type='bg'/>
+      <Card type='bg'/>
+      <Card type='bg'/>
+      <Card type='bg'/>
+      <Card type='bg'/>
+      <Card type='bg'/>
+      <Card type='bg'/>
     </Container>
   )
 }
