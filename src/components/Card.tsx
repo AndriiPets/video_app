@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { CardProps } from "../utils/Types";
+import { CardProps, Channel } from "../utils/Types";
+import { format } from "timeago.js";
+import axios, { AxiosError } from "axios";
 
 const Container = styled.div<CardProps>`
   width: ${(prop) => prop.type !== "sm" && "290px"};
@@ -49,20 +51,32 @@ const Info = styled.div`
 `;
 
 function Card({ type, video }: CardProps) {
+  const [channel, setChannel] = useState<Channel>();
+
+  const [error, setError] = useState<null | AxiosError | Error>(null);
+
+  useEffect(() => {
+    const fetchChannel = async () => {
+      const res = await axios.get(
+        `http://localhost:8000/api/users/find/${video.userId}`
+      );
+      setChannel(res.data);
+    };
+    fetchChannel();
+  }, [video.userId]);
+
   return (
     <Link to="video/test" style={{ textDecoration: "none" }}>
       <Container type={type} video={video}>
         <Image type={type} video={video} src={video.imgUrl} />
         <Details type={type} video={video}>
-          <ChannelImage
-            type={type}
-            video={video}
-            src="https://yt3.ggpht.com/yti/APfAmoE-Q0ZLJ4vk3vqmV4Kwp0sbrjxLyB8Q4ZgNsiRH=s88-c-k-c0x00ffffff-no-rj-mo"
-          />
+          <ChannelImage type={type} video={video} src={channel?.image} />
           <Texts>
             <Title>{video.title}</Title>
-            <ChannelName>Dev Dev</ChannelName>
-            <Info>{video.views} views 1 day ago</Info>
+            <ChannelName>{channel?.name}</ChannelName>
+            <Info>
+              {video.views} views {format(video.createdAt)}
+            </Info>
           </Texts>
         </Details>
       </Container>

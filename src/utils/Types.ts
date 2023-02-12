@@ -9,9 +9,19 @@ type Video = {
   tags: string[];
   likes: string[];
   dislikes: string[];
+  createdAt: string;
 };
 
 export interface CardProps {
   type: string;
   video: Video;
+}
+
+export interface Channel {
+  name: string;
+  email: string;
+  password: string;
+  image: string;
+  subscribers?: number;
+  subscribedUsers?: string[];
 }
