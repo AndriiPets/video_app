@@ -66,7 +66,7 @@ function Card({ type, video }: CardProps) {
   }, [video.userId]);
 
   return (
-    <Link to="video/test" style={{ textDecoration: "none" }}>
+    <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
       <Container type={type} video={video}>
         <Image type={type} video={video} src={video.imgUrl} />
         <Details type={type} video={video}>

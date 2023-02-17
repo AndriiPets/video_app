@@ -21,6 +21,8 @@ import LightMode from "@mui/icons-material/LightMode";
 import DarkMode from "@mui/icons-material/DarkMode";
 import { Theme } from "../utils/Theme";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 const Container = styled.div`
   flex: 1;
@@ -95,6 +97,8 @@ function Menu({
   setDark: Dispatch<SetStateAction<boolean>>;
   dark: boolean;
 }) {
+  const { currUser } = useSelector((state: RootState) => state.user);
+
   return (
     <Container>
       <Wrapper>
@@ -104,12 +108,14 @@ function Menu({
             AstroTube
           </Logo>
         </Link>
-        <Item>
-          <IconWrapper>
-            <HomeIcon />
-          </IconWrapper>
-          Home
-        </Item>
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <IconWrapper>
+              <HomeIcon />
+            </IconWrapper>
+            Home
+          </Item>
+        </Link>
         <Link to="trends" style={{ textDecoration: "none", color: "inherit" }}>
           <Item>
             <IconWrapper>
@@ -143,16 +149,21 @@ function Menu({
           History
         </Item>
         <Hr />
-        <Login>
-          sign in to comment and subscribe!
-          <Link to="signin" style={{ textDecoration: "none" }}>
-            <Button>
-              <AccountCircleOutlinedIcon />
-              SIGN IN
-            </Button>
-          </Link>
-        </Login>
-        <Hr />
+        {!currUser && (
+          <>
+            <Login>
+              sign in to comment and subscribe!
+              <Link to="signin" style={{ textDecoration: "none" }}>
+                <Button>
+                  <AccountCircleOutlinedIcon />
+                  SIGN IN
+                </Button>
+              </Link>
+            </Login>
+            <Hr />
+          </>
+        )}
+
         {/* <Hr/>
         <Item>
           <LibraryMusicOutlinedIcon />

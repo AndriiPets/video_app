@@ -17,10 +17,13 @@ function Home({ type }: { type: string }) {
 
   const loadVideos = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/videos/${type}`);
+      const res = await axios.get(`http://localhost:8000/api/videos/${type}`, {
+        withCredentials: true,
+      });
       setVideos(res.data);
       setError(null);
     } catch (err) {
+      console.log(err);
       if (isAxiosError(err)) {
         setError(err);
       } else if (err instanceof Error) {
