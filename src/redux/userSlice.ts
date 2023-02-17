@@ -30,7 +30,9 @@ export const userSlice = createSlice({
       state.error = true;
     },
     logout: (state) => {
-      state = initialState;
+      state.currUser = null;
+      state.loading = false;
+      state.error = false;
     },
   },
 });

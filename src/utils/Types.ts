@@ -1,4 +1,4 @@
-type Video = {
+export type Video = {
   _id: string;
   userId: string;
   title: string;
@@ -9,7 +9,11 @@ type Video = {
   tags: string[];
   likes: string[];
   dislikes: string[];
-  createdAt: string;
+  createdAt: Date;
+};
+
+export type GetVideoResponce = {
+  data: Video;
 };
 
 export interface CardProps {

@@ -2,9 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import VideoCallIcon from "@mui/icons-material/VideoCallOutlined";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/userSlice";
 
 const Container = styled.div`
   position: sticky;
@@ -56,8 +60,32 @@ const Button = styled.button`
   gap: 5px;
 `;
 
+const User = styled.div`
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.text};
+  margin-right: 15px;
+`;
+const Avatar = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #999;
+`;
+
 function Navbar() {
   const { currUser } = useSelector((state: RootState) => state.user);
+
+  const dispatch = useDispatch();
+
+  const userLogout = async () => {
+    await axios.get("http://localhost:8000/api/auth/logout", {
+      withCredentials: true,
+    });
+    dispatch(logout());
+  };
 
   return (
     <Container>
@@ -67,7 +95,12 @@ function Navbar() {
           <SearchOutlinedIcon />
         </Search>
         {currUser ? (
-          "user"
+          <User>
+            <Button onClick={() => userLogout()}>SIGN OUT</Button>
+            <VideoCallIcon />
+            <Avatar src={currUser.image} />
+            {currUser.name}
+          </User>
         ) : (
           <Link to="signin" style={{ textDecoration: "none" }}>
             <Button>

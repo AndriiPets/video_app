@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
@@ -6,6 +6,14 @@ import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import Comments from "../components/Comments";
 import Card from "../components/Card";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { Video, GetVideoResponce, Channel } from "../utils/Types";
+import axios, { AxiosResponse } from "axios";
+import { fetchSuccess } from "../redux/videoSlice";
+import { format } from "timeago.js";
 
 const Container = styled.div`
   display: flex;
@@ -53,10 +61,9 @@ const Hr = styled.hr`
   border: 0.5px solid ${({ theme }) => theme.soft};
 `;
 
-const Channel = styled.div`
+const ChannelContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 20px;
 `;
 const ChannelInfo = styled.div`
   display: flex;
@@ -99,7 +106,33 @@ const Description = styled.p`
   font-size: 14px;
 `;
 
-function Video() {
+function VideoElement() {
+  const { currUser } = useSelector((state: RootState) => state.user);
+  const { currVideo } = useSelector((state: RootState) => state.video);
+  const dispatch = useDispatch();
+
+  const path = useLocation().pathname.split("/")[2];
+
+  const [channel, setChannel] = useState<Channel>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const videoRes = await axios.get(
+          `http://localhost:8000/api/videos/find/${path}`
+        );
+        const channelRes = await axios.get(
+          `http://localhost:8000/api/users/find/${videoRes.data.userId}`
+        );
+
+        setChannel(channelRes.data);
+        console.log(videoRes.data);
+        dispatch(fetchSuccess(videoRes.data));
+      } catch (err) {}
+    };
+    fetchData();
+  }, [path, dispatch]);
+
   return (
     <Container>
       <Content>
@@ -113,15 +146,17 @@ function Video() {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
-          <Title>Video Title</Title>
+          <Title>{currVideo?.title}</Title>
           <Details>
-            <Info>7,948,154 views • Jun 22, 2022</Info>
+            <Info>
+              {currVideo?.views} views • {format(currVideo?.createdAt || "")}
+            </Info>
             <Buttons>
               <Button>
-                <ThumbUpOutlinedIcon /> 123
+                <ThumbUpOutlinedIcon /> {currVideo?.likes?.length}
               </Button>
               <Button>
-                <ThumbDownOffAltOutlinedIcon /> Dislike
+                <ThumbDownOffAltOutlinedIcon /> {currVideo?.dislikes?.length}
               </Button>
               <Button>
                 <ReplyOutlinedIcon /> Share
@@ -133,22 +168,19 @@ function Video() {
           </Details>
         </VideoWrapper>
         <Hr />
-        <Channel>
+        <ChannelContainer>
           <ChannelInfo>
-            <Avatar src="https://yt3.ggpht.com/yti/APfAmoE-Q0ZLJ4vk3vqmV4Kwp0sbrjxLyB8Q4ZgNsiRH=s88-c-k-c0x00ffffff-no-rj-mo" />
+            <Avatar src={channel?.image} />
+            <ChannelDetail>
+              <ChannelName>{channel?.name}</ChannelName>
+              <ChannelCounter>
+                {channel?.subscribers} subscribers
+              </ChannelCounter>
+              <Description>{currVideo?.desc}</Description>
+            </ChannelDetail>
           </ChannelInfo>
-          <ChannelDetail>
-            <ChannelName>Dev Dev</ChannelName>
-            <ChannelCounter>200K subscribers</ChannelCounter>
-            <Description>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Doloribus laborum delectus unde quaerat dolore culpa sit aliquam
-              at. Vitae facere ipsum totam ratione exercitationem. Suscipit
-              animi accusantium dolores ipsam ut.
-            </Description>
-          </ChannelDetail>
           <Subscribe>SUBSCRIBE</Subscribe>
-        </Channel>
+        </ChannelContainer>
         <Hr />
         <Comments />
       </Content>
@@ -157,4 +189,4 @@ function Video() {
   );
 }
 
-export default Video;
+export default VideoElement;
