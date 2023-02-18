@@ -22,6 +22,7 @@ export interface CardProps {
 }
 
 export interface Channel {
+  _id?: string;
   name: string;
   email: string;
   password: string;
