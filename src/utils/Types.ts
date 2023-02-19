@@ -30,3 +30,11 @@ export interface Channel {
   subscribers?: number;
   subscribedUsers?: string[];
 }
+
+export interface CommentType {
+  _id: string;
+  userId: string;
+  videoUd: string;
+  desc: string;
+  createdAt: Date;
+}
