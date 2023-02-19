@@ -16,6 +16,7 @@ import { Video, GetVideoResponce, Channel } from "../utils/Types";
 import axios, { AxiosResponse } from "axios";
 import { dislike, fetchSuccess, like } from "../redux/videoSlice";
 import { format } from "timeago.js";
+import { subscription } from "../redux/userSlice";
 
 const Container = styled.div`
   display: flex;
@@ -81,6 +82,16 @@ const Subscribe = styled.button`
   cursor: pointer;
 `;
 
+const Subscribed = styled.button`
+  background-color: #c1c0bf;
+  font-weight: 500;
+  color: #676666;
+  border: none;
+  height: max-content;
+  padding: 10px 20px;
+  cursor: pointer;
+`;
+
 const Avatar = styled.img`
   width: 40px;
   height: 40px;
@@ -106,6 +117,12 @@ const ChannelCounter = styled.span`
 
 const Description = styled.p`
   font-size: 14px;
+`;
+
+const VideoFrame = styled.video`
+  max-height: 720px;
+  width: 100%;
+  object-fit: cover;
 `;
 
 function VideoElement() {
@@ -153,50 +170,61 @@ function VideoElement() {
     dispatch(dislike(currUser?._id));
   };
 
+  const handleSub = async () => {
+    await axios.put(
+      `http://localhost:8000/api/users/sub/${channel?._id}`,
+      {},
+      { withCredentials: true }
+    );
+    dispatch(subscription(channel?._id));
+  };
+
+  const handleUnsub = async () => {
+    await axios.put(
+      `http://localhost:8000/api/users/unsub/${channel?._id}`,
+      {},
+      { withCredentials: true }
+    );
+    dispatch(subscription(channel?._id));
+  };
+
   return (
     <Container>
       <Content>
         <VideoWrapper>
-          <iframe
-            width="100%"
-            height="480"
-            src="https://www.youtube.com/embed/k3Vfj-e1Ma4"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-          <Title>{currVideo?.title}</Title>
-          <Details>
-            <Info>
-              {currVideo?.views} views • {format(currVideo?.createdAt || "")}
-            </Info>
-            <Buttons>
-              <Button onClick={() => handleLike()}>
-                {currVideo?.likes.includes(currUser?._id || " ") ? (
-                  <ThumbUpIcon />
-                ) : (
-                  <ThumbUpOutlinedIcon />
-                )}
-                {currVideo?.likes?.length}
-              </Button>
-              <Button onClick={() => handleDislike()}>
-                {currVideo?.dislikes.includes(currUser?._id || " ") ? (
-                  <ThunbDownIcon />
-                ) : (
-                  <ThumbDownOffAltOutlinedIcon />
-                )}
-                {currVideo?.dislikes?.length}
-              </Button>
-              <Button>
-                <ReplyOutlinedIcon /> Share
-              </Button>
-              <Button>
-                <AddTaskOutlinedIcon /> Save
-              </Button>
-            </Buttons>
-          </Details>
+          <VideoFrame src={currVideo?.videoUrl} />
         </VideoWrapper>
+        <Title>{currVideo?.title}</Title>
+        <Details>
+          <Info>
+            {currVideo?.views} views • {format(currVideo?.createdAt || "")}
+          </Info>
+          <Buttons>
+            <Button onClick={() => handleLike()}>
+              {currVideo?.likes.includes(currUser?._id || " ") ? (
+                <ThumbUpIcon />
+              ) : (
+                <ThumbUpOutlinedIcon />
+              )}
+              {currVideo?.likes?.length}
+            </Button>
+            <Button onClick={() => handleDislike()}>
+              {currVideo?.dislikes.includes(currUser?._id || " ") ? (
+                <ThunbDownIcon />
+              ) : (
+                <ThumbDownOffAltOutlinedIcon />
+              )}
+              {currVideo?.dislikes?.length}
+            </Button>
+            <Button>
+              <ReplyOutlinedIcon /> Share
+            </Button>
+            <Button>
+              <AddTaskOutlinedIcon /> Save
+            </Button>
+          </Buttons>
+        </Details>
+
         <Hr />
         <ChannelContainer>
           <ChannelInfo>
@@ -209,10 +237,14 @@ function VideoElement() {
               <Description>{currVideo?.desc}</Description>
             </ChannelDetail>
           </ChannelInfo>
-          <Subscribe>SUBSCRIBE</Subscribe>
+          {currUser?.subscribedUsers?.includes(channel?._id || "") ? (
+            <Subscribed onClick={() => handleUnsub()}>UNSUBSCRIBE</Subscribed>
+          ) : (
+            <Subscribe onClick={() => handleSub()}>SUBSCRIBE</Subscribe>
+          )}
         </ChannelContainer>
         <Hr />
-        <Comments />
+        <Comments videoId={currVideo?._id} />
       </Content>
       <Recomendation></Recomendation>
     </Container>
