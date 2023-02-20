@@ -82,11 +82,15 @@ function Signin() {
     signInWithPopup(auth, provider)
       .then((result) => {
         axios
-          .post("http://localhost:8000/api/auth/google", {
-            name: result.user.displayName,
-            email: result.user.email,
-            image: result.user.photoURL,
-          })
+          .post(
+            "http://localhost:8000/api/auth/google",
+            {
+              name: result.user.displayName,
+              email: result.user.email,
+              image: result.user.photoURL,
+            },
+            { withCredentials: true }
+          )
           .then((res) => dispatch(loginSuccess(res.data)));
       })
       .catch((err) => {
