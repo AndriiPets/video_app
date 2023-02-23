@@ -1,5 +1,12 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
 import styled from "styled-components";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import app from "../firebase";
 
 const Container = styled.div`
   width: 100%;
@@ -66,19 +73,123 @@ const Lable = styled.label`
   font-size: 14px;
 `;
 
+interface Inputs {
+  desc?: string;
+  title?: string;
+  imgUrl?: string;
+  videoUrl?: string;
+}
+
 function Upload({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
+  const [img, setImg] = useState<File | null>(null);
+  const [video, setVideo] = useState<File | null>(null);
+  const [imgPerc, setImgPerc] = useState(0);
+  const [videoPerc, setVideoPerc] = useState(0);
+  const [inputs, setInputs] = useState<Inputs>();
+  const [tags, setTags] = useState<string[]>([]);
+
+  const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTags(e.target.value.split(","));
+  };
+
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setInputs((prev) => {
+      return { ...prev, [e.target.name]: [e.target.value] };
+    });
+  };
+
+  const uploadFile = (file: File, urlType: string) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        urlType === "imgUrl"
+          ? setImgPerc(Math.round(progress))
+          : setVideoPerc(progress);
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+          default:
+            break;
+        }
+      },
+      (error) => {},
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setInputs((prev) => {
+            return { ...prev, [urlType]: downloadURL };
+          });
+        });
+      }
+    );
+  };
+
+  useEffect(() => {
+    video && uploadFile(video, "videoUrl");
+  }, [video]);
+
+  useEffect(() => {
+    img && uploadFile(img, "imgUrl");
+  }, [img]);
+
   return (
     <Container>
       <Wrapper>
         <Close onClick={() => setOpen(false)}>X</Close>
         <Title>Upload a New Video</Title>
         <Lable>Video:</Lable>
-        <Input type="file" accept="video/*" />
-        <Input type="text" placeholder="Title" />
-        <Desc placeholder="Description" rows={8} />
-        <Input type="text" placeholder="Separate tags with commas." />
+        {videoPerc > 0 ? (
+          "Uploading:" + videoPerc + "%"
+        ) : (
+          <Input
+            type="file"
+            accept="video/*"
+            onChange={(e) => e.target.files && setVideo(e.target.files[0])}
+          />
+        )}
+        <Input
+          type="text"
+          placeholder="Title"
+          name="title"
+          onChange={handleChange}
+        />
+        <Desc
+          placeholder="Description"
+          rows={8}
+          name="desc"
+          onChange={handleChange}
+        />
+        <Input
+          type="text"
+          placeholder="Separate tags with commas."
+          onChange={handleTags}
+        />
         <Lable>Thumbnail:</Lable>
-        <Input type="file" accept="image/*" />
+        {imgPerc > 0 ? (
+          "Uploading:" + imgPerc + "%"
+        ) : (
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={(e) => e.target.files && setImg(e.target.files[0])}
+          />
+        )}
         <Button>Upload</Button>
       </Wrapper>
     </Container>
