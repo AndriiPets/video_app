@@ -7,6 +7,8 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../firebase";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -78,6 +80,7 @@ interface Inputs {
   title?: string;
   imgUrl?: string;
   videoUrl?: string;
+  tags?: string[];
 }
 
 function Upload({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
@@ -87,6 +90,8 @@ function Upload({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
   const [videoPerc, setVideoPerc] = useState(0);
   const [inputs, setInputs] = useState<Inputs>();
   const [tags, setTags] = useState<string[]>([]);
+
+  const navigate = useNavigate();
 
   const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTags(e.target.value.split(","));
@@ -98,7 +103,7 @@ function Upload({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setInputs((prev) => {
-      return { ...prev, [e.target.name]: [e.target.value] };
+      return { ...prev, [e.target.name]: e.target.value };
     });
   };
 
@@ -116,7 +121,7 @@ function Upload({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         urlType === "imgUrl"
           ? setImgPerc(Math.round(progress))
-          : setVideoPerc(progress);
+          : setVideoPerc(Math.round(progress));
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
@@ -147,6 +152,19 @@ function Upload({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
   useEffect(() => {
     img && uploadFile(img, "imgUrl");
   }, [img]);
+
+  const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log(inputs);
+    const res = await axios.post(
+      "http://localhost:8000/api/videos",
+      { ...inputs, tags },
+      { withCredentials: true }
+    );
+    setOpen(false);
+
+    res.status === 200 && navigate(`/video/${res.data._id}`);
+  };
 
   return (
     <Container>
@@ -190,7 +208,7 @@ function Upload({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
             onChange={(e) => e.target.files && setImg(e.target.files[0])}
           />
         )}
-        <Button>Upload</Button>
+        <Button onClick={(e) => handleUpload(e)}>Upload</Button>
       </Wrapper>
     </Container>
   );
