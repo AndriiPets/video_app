@@ -94,7 +94,7 @@ function Upload({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
   const navigate = useNavigate();
 
   const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTags(e.target.value.split(","));
+    e.target.value ? setTags(e.target.value.split(",")) : setTags(["default"]);
   };
 
   const handleChange = (

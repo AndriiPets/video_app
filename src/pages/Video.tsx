@@ -11,12 +11,14 @@ import Card from "../components/Card";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Video, GetVideoResponce, Channel } from "../utils/Types";
 import axios, { AxiosResponse } from "axios";
 import { dislike, fetchSuccess, like } from "../redux/videoSlice";
 import { format } from "timeago.js";
 import { subscription } from "../redux/userSlice";
+import Subscription from "./Subscription";
+import Recommendation from "../components/Recommendation";
 
 const Container = styled.div`
   display: flex;
@@ -25,9 +27,7 @@ const Container = styled.div`
 const Content = styled.div`
   flex: 5;
 `;
-const Recomendation = styled.div`
-  flex: 2;
-`;
+
 const VideoWrapper = styled.div``;
 const Title = styled.h1`
   font-size: 18px;
@@ -72,30 +72,12 @@ const ChannelInfo = styled.div`
   display: flex;
   gap: 20px;
 `;
-const Subscribe = styled.button`
-  background-color: #cc1a00;
-  font-weight: 500;
-  color: white;
-  border: none;
-  height: max-content;
-  padding: 10px 20px;
-  cursor: pointer;
-`;
-
-const Subscribed = styled.button`
-  background-color: #c1c0bf;
-  font-weight: 500;
-  color: #676666;
-  border: none;
-  height: max-content;
-  padding: 10px 20px;
-  cursor: pointer;
-`;
 
 const Avatar = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  cursor: pointer;
 `;
 
 const ChannelDetail = styled.div`
@@ -120,7 +102,7 @@ const Description = styled.p`
 `;
 
 const VideoFrame = styled.video`
-  max-height: 720px;
+  max-height: 520px;
   width: 100%;
   object-fit: cover;
 `;
@@ -129,6 +111,8 @@ function VideoElement() {
   const { currUser } = useSelector((state: RootState) => state.user);
   const { currVideo } = useSelector((state: RootState) => state.video);
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const path = useLocation().pathname.split("/")[2];
 
@@ -170,29 +154,11 @@ function VideoElement() {
     dispatch(dislike(currUser?._id));
   };
 
-  const handleSub = async () => {
-    await axios.put(
-      `http://localhost:8000/api/users/sub/${channel?._id}`,
-      {},
-      { withCredentials: true }
-    );
-    dispatch(subscription(channel?._id));
-  };
-
-  const handleUnsub = async () => {
-    await axios.put(
-      `http://localhost:8000/api/users/unsub/${channel?._id}`,
-      {},
-      { withCredentials: true }
-    );
-    dispatch(subscription(channel?._id));
-  };
-
   return (
     <Container>
       <Content>
         <VideoWrapper>
-          <VideoFrame src={currVideo?.videoUrl} />
+          <VideoFrame src={currVideo?.videoUrl} controls />
         </VideoWrapper>
         <Title>{currVideo?.title}</Title>
         <Details>
@@ -228,7 +194,10 @@ function VideoElement() {
         <Hr />
         <ChannelContainer>
           <ChannelInfo>
-            <Avatar src={channel?.image} />
+            <Avatar
+              src={channel?.image}
+              onClick={() => navigate(`/channel/${channel?._id}`)}
+            />
             <ChannelDetail>
               <ChannelName>{channel?.name}</ChannelName>
               <ChannelCounter>
@@ -237,16 +206,12 @@ function VideoElement() {
               <Description>{currVideo?.desc}</Description>
             </ChannelDetail>
           </ChannelInfo>
-          {currUser?.subscribedUsers?.includes(channel?._id || "") ? (
-            <Subscribed onClick={() => handleUnsub()}>UNSUBSCRIBE</Subscribed>
-          ) : (
-            <Subscribe onClick={() => handleSub()}>SUBSCRIBE</Subscribe>
-          )}
+          <Subscription channel={channel} />
         </ChannelContainer>
         <Hr />
         <Comments videoId={currVideo?._id} />
       </Content>
-      <Recomendation></Recomendation>
+      <Recommendation tags={currVideo?.tags || []} />
     </Container>
   );
 }
