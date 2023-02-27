@@ -15,6 +15,7 @@ import {
 import Home from "./pages/Home";
 import Video from "./pages/Video";
 import Signin from "./pages/Signin";
+import ChannelPage from "./pages/Channel";
 
 const Container = styled.div`
   display: flex;
@@ -48,6 +49,9 @@ function App() {
                   <Route path="signin" element={<Signin />} />
                   <Route path="video">
                     <Route path=":id" element={<Video />} />
+                  </Route>
+                  <Route path="channel">
+                    <Route path=":id" element={<ChannelPage />} />
                   </Route>
                 </Route>
               </Routes>

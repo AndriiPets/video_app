@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { loginFaliure, loginStart, loginSuccess } from "../redux/userSlice";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -58,6 +59,8 @@ function Signin() {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+
   const login = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     dispatch(loginStart());
@@ -72,6 +75,7 @@ function Signin() {
       );
       console.log(res.data);
       dispatch(loginSuccess(res.data));
+      navigate("/trends");
     } catch (err) {
       dispatch(loginFaliure());
     }
@@ -92,6 +96,7 @@ function Signin() {
             { withCredentials: true }
           )
           .then((res) => dispatch(loginSuccess(res.data)));
+        navigate("/trends");
       })
       .catch((err) => {
         dispatch(loginFaliure(err));
