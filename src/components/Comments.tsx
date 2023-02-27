@@ -38,6 +38,8 @@ function Comments({ videoId }: { videoId: string | undefined }) {
 
   const [comment, setComment] = useState("");
 
+  const [reFetch, setReFetch] = useState(false);
+
   const sendComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -50,6 +52,7 @@ function Comments({ videoId }: { videoId: string | undefined }) {
       { withCredentials: true }
     );
     setComment("");
+    setReFetch(!reFetch);
   };
 
   useEffect(() => {
@@ -63,7 +66,7 @@ function Comments({ videoId }: { videoId: string | undefined }) {
       } catch (err) {}
     };
     fetchComments();
-  }, [videoId, sendComment]);
+  }, [videoId, reFetch]);
 
   return (
     <Container>
@@ -76,6 +79,10 @@ function Comments({ videoId }: { videoId: string | undefined }) {
             type="text"
             onChange={(e) => setComment(e.target.value)}
           />
+
+          <CommentButton type="submit" onClick={sendComment}>
+            SAVE
+          </CommentButton>
           <CommentButton
             onClick={(e) => {
               e.preventDefault();
@@ -83,9 +90,6 @@ function Comments({ videoId }: { videoId: string | undefined }) {
             }}
           >
             CANCEL
-          </CommentButton>
-          <CommentButton type="submit" onClick={sendComment}>
-            SUBMIT
           </CommentButton>
         </NewComment>
       </form>
