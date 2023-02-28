@@ -1,5 +1,5 @@
 import axios from "axios";
-import Reac, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Card from "../components/Card";
