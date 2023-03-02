@@ -7,7 +7,6 @@ import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThunbDownIcon from "@mui/icons-material/ThumbDown";
 import Comments from "../components/Comments";
-import Card from "../components/Card";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useDispatch } from "react-redux";
