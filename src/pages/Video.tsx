@@ -12,10 +12,9 @@ import { RootState } from "../redux/store";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Video, GetVideoResponce, Channel } from "../utils/Types";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { dislike, fetchSuccess, like } from "../redux/videoSlice";
 import { format } from "timeago.js";
-import { subscription } from "../redux/userSlice";
 import Subscription from "./Subscription";
 import Recommendation from "../components/Recommendation";
 
