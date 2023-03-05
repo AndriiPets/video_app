@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Video, GetVideoResponce, Channel } from "../utils/Types";
+import { Channel } from "../utils/Types";
 import axios from "axios";
 import { dislike, fetchSuccess, like } from "../redux/videoSlice";
 import { format } from "timeago.js";
