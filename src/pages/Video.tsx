@@ -32,7 +32,7 @@ const VideoWrapper = styled.div``;
 const Title = styled.h1`
   font-size: 18px;
   font-weight: 400;
-  margin-top: 20px;
+  margin-top: 30px;
   margin-bottom: 10px;
   color: ${({ theme }) => theme.text};
 `;
@@ -133,7 +133,8 @@ function VideoElement() {
     playbackRates: [0.5, 1, 1.25, 1.5, 2],
     controls: true,
     responsive: true,
-    height: 520,
+    fluid: true,
+    aspectRatio: "16:9",
     sources: [
       {
         src: currVideo?.videoUrl,
