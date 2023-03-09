@@ -5,6 +5,10 @@ import styled from "styled-components";
 import Card from "../components/Card";
 import { CardProps, Channel } from "../utils/Types";
 import Subscription from "./Subscription";
+import { open, close } from "../redux/uiSlice";
+import { useDispatch } from "react-redux";
+import { RootState } from "../redux/store";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   display: flex;
@@ -57,6 +61,9 @@ function ChannelPage() {
   const [videos, setVideos] = useState([]);
   const [userInfo, setUserInfo] = useState<Channel>();
   const path = useLocation().pathname.split("/")[2];
+  const { menu } = useSelector((state: RootState) => state.ui);
+
+  const dispatch = useDispatch();
 
   const loadUser = async () => {
     try {
@@ -85,6 +92,10 @@ function ChannelPage() {
   useEffect(() => {
     loadVideos();
     loadUser();
+  }, []);
+
+  useEffect(() => {
+    dispatch(open());
   }, []);
 
   return (

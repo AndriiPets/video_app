@@ -15,6 +15,7 @@ const Subscribe = styled.button`
   height: max-content;
   padding: 10px 20px;
   cursor: pointer;
+  border-radius: 10px;
 `;
 
 const Subscribed = styled.button`
@@ -25,6 +26,7 @@ const Subscribed = styled.button`
   height: max-content;
   padding: 10px 20px;
   cursor: pointer;
+  border-radius: 10px;
 `;
 
 function Subscription({ channel }: { channel: Channel | undefined }) {

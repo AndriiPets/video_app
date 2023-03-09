@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import VideoCallIcon from "@mui/icons-material/VideoCallOutlined";
+import { Menu } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
@@ -10,6 +11,8 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
 import Upload from "./Upload";
+import logoImg from "../img/Rocket-PNG-Clipart.png";
+import Logo from "./LogoMenu";
 
 const Container = styled.div`
   position: sticky;
@@ -17,11 +20,12 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSide};
   height: 56px;
   color: ${({ theme }) => theme.text};
+  z-index: 1;
 `;
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   height: 100%;
   pad: 0px 20px;
@@ -100,6 +104,7 @@ function Navbar() {
     <>
       <Container>
         <Wrapper>
+          <Logo />
           <Search>
             <Input
               placeholder="Search..."

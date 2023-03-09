@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { CommentType, Channel } from "../utils/Types";
 import { format } from "timeago.js";
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, MoreVert } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 
@@ -19,6 +19,14 @@ const IconWrapper = styled.div`
   align-self: center;
   cursor: pointer;
   margin-left: auto;
+`;
+
+const IconBox = styled.div`
+  padding: 5px 5px 5px 5px;
+  border-radius: 50%;
+  background-color: transparent;
+
+  position: relative;
 `;
 const Avatar = styled.img`
   width: 40px;
@@ -56,7 +64,20 @@ const Text = styled.span`
   font-size: 14px;
 `;
 
-const EditButton = styled.button``;
+const EditButton = styled.button`
+  border-radius: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  cursor: pointer;
+  font-weight: 500;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  color: ${({ theme }) => theme.text};
+  &:hover {
+    background-color: ${({ theme }) => theme.soft};
+  }
+`;
 
 const EditForm = styled.form`
   display: flex;
@@ -65,6 +86,42 @@ const EditForm = styled.form`
   width: 100%;
 `;
 
+// edit delete options
+
+const Drawer = styled.div`
+  margin-top: 3px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: ${({ theme }) => theme.text};
+  margin-top: 3px;
+`;
+
+const Content = styled.div`
+  z-index: 1;
+  background-color: ${({ theme }) => theme.soft};
+  padding: 5px 5px 5px 5px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const OptonContainer = styled.button`
+  border: none;
+  cursor: pointer;
+  padding: 5px 5px 5px 5px;
+  border-radius: 10px;
+  color: ${({ theme }) => theme.text};
+  background-color: transparent;
+  &:hover {
+    background-color: ${({ theme }) => theme.bgMain};
+  }
+`;
+
+const Option = styled.h3``;
+
 function Comment({ comment }: { comment: CommentType }) {
   const { currUser } = useSelector((state: RootState) => state.user);
   const [channel, setChannel] = useState<Channel>();
@@ -72,6 +129,9 @@ function Comment({ comment }: { comment: CommentType }) {
   const [updatedComment, setUpdatedComment] = useState(comment.desc);
   const [defaultComment, setDefaultComment] = useState(comment.desc);
   const [deleted, setDeleted] = useState(true);
+
+  //edit delete options
+  const [drawer, setDrawer] = useState(false);
 
   useEffect(() => {
     const fetchChannel = async () => {
@@ -98,7 +158,7 @@ function Comment({ comment }: { comment: CommentType }) {
   };
 
   const deleteComment = async (
-    e: React.MouseEvent<SVGSVGElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
 
@@ -143,8 +203,24 @@ function Comment({ comment }: { comment: CommentType }) {
           )}
           {comment.userId === currUser?._id && !openEdit && (
             <IconWrapper>
-              <Edit onClick={() => setOpenEdit(true)} />
-              <Delete onClick={(e) => deleteComment(e)} />
+              <IconBox onClick={() => setDrawer(!drawer)}>
+                <MoreVert />
+
+                {drawer && (
+                  <Drawer>
+                    <Content>
+                      <OptonContainer onClick={() => setOpenEdit(true)}>
+                        <Option>edit</Option>
+                      </OptonContainer>
+                      <OptonContainer onClick={(e) => deleteComment(e)}>
+                        <Option>delete</Option>
+                      </OptonContainer>
+                    </Content>
+                  </Drawer>
+                )}
+              </IconBox>
+              {/* <Edit onClick={() => setOpenEdit(true)} />
+              <Delete onClick={(e) => deleteComment(e)} /> */}
             </IconWrapper>
           )}
         </Container>

@@ -17,14 +17,19 @@ import Video from "./pages/Video";
 import Signin from "./pages/Signin";
 import ChannelPage from "./pages/Channel";
 import Search from "./pages/Search";
+import { RootState } from "./redux/store";
+import { useSelector } from "react-redux";
 
-const Container = styled.div`
-  display: flex;
-`;
+const Container = styled.div``;
 
 const Main = styled.div`
   flex: 7;
   background-color: ${({ theme }) => theme.bgMain};
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 const Wrapper = styled.div`
@@ -34,33 +39,42 @@ const Wrapper = styled.div`
 function App() {
   const [dark, setDark] = useState(true);
 
+  const { menu } = useSelector((state: RootState) => state.ui);
+
   return (
     <ThemeProvider theme={dark ? darkTheme : lightTheme}>
-      <Container>
-        <BrowserRouter>
-          <Menu setDark={setDark} dark={dark} />
-          <Main>
+      <BrowserRouter>
+        <Container>
+          <div>
             <Navbar />
-            <Wrapper>
-              <Routes>
-                <Route path="/">
-                  <Route index element={<Home type="random" />} />
-                  <Route path="trends" element={<Home type="trend" />} />
-                  <Route path="subscriptions" element={<Home type="sub" />} />
-                  <Route path="search" element={<Search />} />
-                  <Route path="signin" element={<Signin />} />
-                  <Route path="video">
-                    <Route path=":id" element={<Video />} />
-                  </Route>
-                  <Route path="channel">
-                    <Route path=":id" element={<ChannelPage />} />
-                  </Route>
-                </Route>
-              </Routes>
-            </Wrapper>
-          </Main>
-        </BrowserRouter>
-      </Container>
+            <Content>
+              {menu && <Menu setDark={setDark} dark={dark} />}
+              <Main>
+                <Wrapper>
+                  <Routes>
+                    <Route path="/">
+                      <Route index element={<Home type="random" />} />
+                      <Route path="trends" element={<Home type="trend" />} />
+                      <Route
+                        path="subscriptions"
+                        element={<Home type="sub" />}
+                      />
+                      <Route path="search" element={<Search />} />
+                      <Route path="signin" element={<Signin />} />
+                      <Route path="video">
+                        <Route path=":id" element={<Video />} />
+                      </Route>
+                      <Route path="channel">
+                        <Route path=":id" element={<ChannelPage />} />
+                      </Route>
+                    </Route>
+                  </Routes>
+                </Wrapper>
+              </Main>
+            </Content>
+          </div>
+        </Container>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
