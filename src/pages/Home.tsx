@@ -3,15 +3,24 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Card from "../components/Card";
 import { CardProps } from "../utils/Types";
+import { open, close } from "../redux/uiSlice";
+import { useDispatch } from "react-redux";
+import { RootState } from "../redux/store";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 6px;
 `;
 
 function Home({ type }: { type: string }) {
   const [videos, setVideos] = useState([]);
+
+  const { menu } = useSelector((state: RootState) => state.ui);
+
+  const dispatch = useDispatch();
 
   const [error, setError] = useState<null | AxiosError | Error>(null);
 
@@ -46,6 +55,10 @@ function Home({ type }: { type: string }) {
   useEffect(() => {
     loadVideos();
   }, [type]);
+
+  useEffect(() => {
+    dispatch(open());
+  }, []);
 
   return (
     <Container>

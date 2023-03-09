@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import videoReducer from "./videoSlice";
+import uiReducer from "./uiSlice";
 import {
   persistStore,
   persistReducer,
@@ -20,7 +21,11 @@ const persistConfig = {
   storage,
 };
 
-const rootApp = combineReducers({ user: userReducer, video: videoReducer });
+const rootApp = combineReducers({
+  user: userReducer,
+  video: videoReducer,
+  ui: uiReducer,
+});
 
 const rootReducer = (state: any, action: any) => {
   if (action.type === "user/logout") {

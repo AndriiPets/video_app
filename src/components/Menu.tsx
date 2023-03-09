@@ -23,15 +23,16 @@ import { Theme } from "../utils/Theme";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import LogoMenu from "./LogoMenu";
 
 const Container = styled.div`
-  flex: 1;
   background-color: ${({ theme }) => theme.bgSide};
   height: 100vh;
   color: ${({ theme }) => theme.text};
   font-size: 14px;
   position: sticky;
   top: 0;
+  flex: 1;
 `;
 const Wrapper = styled.div`
   padding: 18px 26px;
@@ -102,12 +103,13 @@ function Menu({
   return (
     <Container>
       <Wrapper>
-        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+        <Logo></Logo>
+        {/* <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Logo>
             <Image src={logoImg} />
             AstroTube
           </Logo>
-        </Link>
+        </Link> */}
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Item>
             <IconWrapper>

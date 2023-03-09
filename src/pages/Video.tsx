@@ -17,6 +17,8 @@ import { dislike, fetchSuccess, like } from "../redux/videoSlice";
 import { format } from "timeago.js";
 import Subscription from "./Subscription";
 import Recommendation from "../components/Recommendation";
+import { open, close } from "../redux/uiSlice";
+import VideoPlayer from "../components/VideoComponent";
 
 const Container = styled.div`
   display: flex;
@@ -99,7 +101,16 @@ const Description = styled.p`
   font-size: 14px;
 `;
 
-const VideoFrame = styled.video`
+const DescriptionBox = styled.div`
+  background-color: ${({ theme }) => theme.soft};
+  border-radius: 10px;
+  padding: 15px 15px 15px 15px;
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => theme.text};
+`;
+
+const VideoFrame = styled.div`
   max-height: 520px;
   width: 100%;
   object-fit: cover;
@@ -108,6 +119,7 @@ const VideoFrame = styled.video`
 function VideoElement() {
   const { currUser } = useSelector((state: RootState) => state.user);
   const { currVideo } = useSelector((state: RootState) => state.video);
+  const { menu } = useSelector((state: RootState) => state.ui);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -115,6 +127,20 @@ function VideoElement() {
   const path = useLocation().pathname.split("/")[2];
 
   const [channel, setChannel] = useState<Channel>();
+
+  const videoOptions = {
+    autoplay: false,
+    playbackRates: [0.5, 1, 1.25, 1.5, 2],
+    controls: true,
+    responsive: true,
+    height: 520,
+    sources: [
+      {
+        src: currVideo?.videoUrl,
+        type: "video/mp4",
+      },
+    ],
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -133,6 +159,10 @@ function VideoElement() {
     };
     fetchData();
   }, [path, dispatch]);
+
+  useEffect(() => {
+    dispatch(close());
+  }, []);
 
   const handleLike = async () => {
     await axios.put(
@@ -156,7 +186,9 @@ function VideoElement() {
     <Container>
       <Content>
         <VideoWrapper>
-          <VideoFrame src={currVideo?.videoUrl} controls />
+          <VideoFrame>
+            <VideoPlayer options={videoOptions} />
+          </VideoFrame>
         </VideoWrapper>
         <Title>{currVideo?.title}</Title>
         <Details>
@@ -201,11 +233,13 @@ function VideoElement() {
               <ChannelCounter>
                 {channel?.subscribers} subscribers
               </ChannelCounter>
-              <Description>{currVideo?.desc}</Description>
             </ChannelDetail>
           </ChannelInfo>
           <Subscription channel={channel} />
         </ChannelContainer>
+        <DescriptionBox>
+          <Description>{currVideo?.desc}</Description>
+        </DescriptionBox>
         <Hr />
         <Comments videoId={currVideo?._id} />
       </Content>
