@@ -18,7 +18,7 @@ const Image = styled.img<CardProps>`
   height: ${(prop) => (prop.type === "sm" ? "110px" : "192px")};
   background-color: #999;
   flex: 1;
-  border-radius: ${(prop) => (prop.type === "sm" ? "10px" : "0%")};
+  border-radius: ${(prop) => (prop.type === "sm" ? "10px" : "10px")};
 `;
 const Details = styled.div<CardProps>`
   display: flex;

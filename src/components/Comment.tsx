@@ -6,6 +6,7 @@ import { format } from "timeago.js";
 import { Edit, Delete, MoreVert } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import Modal from "./Modal";
 
 const Container = styled.div`
   display: flex;
@@ -129,6 +130,7 @@ function Comment({ comment }: { comment: CommentType }) {
   const [updatedComment, setUpdatedComment] = useState(comment.desc);
   const [defaultComment, setDefaultComment] = useState(comment.desc);
   const [deleted, setDeleted] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
 
   //edit delete options
   const [drawer, setDrawer] = useState(false);
@@ -166,6 +168,13 @@ function Comment({ comment }: { comment: CommentType }) {
       withCredentials: true,
     });
     setDeleted(false);
+  };
+
+  //modal options
+  const modalOptions = {
+    content: "do you want to delele this comment?",
+    callback: deleteComment,
+    setIsOpen: setModalOpen,
   };
 
   return (
@@ -212,7 +221,7 @@ function Comment({ comment }: { comment: CommentType }) {
                       <OptonContainer onClick={() => setOpenEdit(true)}>
                         <Option>edit</Option>
                       </OptonContainer>
-                      <OptonContainer onClick={(e) => deleteComment(e)}>
+                      <OptonContainer onClick={() => setModalOpen(true)}>
                         <Option>delete</Option>
                       </OptonContainer>
                     </Content>
@@ -223,6 +232,7 @@ function Comment({ comment }: { comment: CommentType }) {
               <Delete onClick={(e) => deleteComment(e)} /> */}
             </IconWrapper>
           )}
+          {modalOpen && <Modal {...modalOptions} />}
         </Container>
       )}
     </div>
