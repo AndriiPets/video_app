@@ -19,6 +19,7 @@ import Subscription from "./Subscription";
 import Recommendation from "../components/Recommendation";
 import { open, close } from "../redux/uiSlice";
 import VideoPlayer from "../components/VideoComponent";
+import DescriptionContainer from "../components/DescriptionBox";
 
 const Container = styled.div`
   display: flex;
@@ -32,7 +33,7 @@ const VideoWrapper = styled.div``;
 const Title = styled.h1`
   font-size: 18px;
   font-weight: 400;
-  margin-top: 30px;
+  margin-top: 40px;
   margin-bottom: 10px;
   color: ${({ theme }) => theme.text};
 `;
@@ -121,6 +122,10 @@ function VideoElement() {
   const { currVideo } = useSelector((state: RootState) => state.video);
   const { menu } = useSelector((state: RootState) => state.ui);
   const dispatch = useDispatch();
+  const descriptionProps = {
+    text: currVideo?.desc || " ",
+    tags: currVideo?.tags || [],
+  };
 
   const navigate = useNavigate();
 
@@ -239,7 +244,7 @@ function VideoElement() {
           <Subscription channel={channel} />
         </ChannelContainer>
         <DescriptionBox>
-          <Description>{currVideo?.desc}</Description>
+          <DescriptionContainer {...descriptionProps} />
         </DescriptionBox>
         <Hr />
         <Comments videoId={currVideo?._id} />

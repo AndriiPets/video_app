@@ -12,8 +12,8 @@ const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  margin-left: 20px;
+  gap: 10px;
+  margin-left: 10px;
 `;
 
 const Logo = styled.div`
