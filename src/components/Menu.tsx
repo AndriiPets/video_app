@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
 import logoImg from "../img/Rocket-PNG-Clipart.png";
 import HomeIcon from "@mui/icons-material/Home";
@@ -20,10 +20,12 @@ import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightne
 import LightMode from "@mui/icons-material/LightMode";
 import DarkMode from "@mui/icons-material/DarkMode";
 import { Theme } from "../utils/Theme";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import LogoMenu from "./LogoMenu";
+import axios from "axios";
+import { Channel } from "../utils/Types";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSide};
@@ -51,6 +53,33 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   gap: 5px;
+`;
+
+const SubscriptionsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+const Subscription = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+`;
+const SubAvatar = styled.img`
+  border-radius: 50%;
+  height: 36px;
+  width: 36px;
+  cursor: pointer;
+`;
+const SubName = styled.p`
+  font-weight: 500;
+`;
+
+const Text = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Logo = styled.div`
@@ -100,6 +129,29 @@ function Menu({
 }) {
   const { currUser } = useSelector((state: RootState) => state.user);
 
+  const [subs, setSubs] = useState<Channel[]>([]);
+
+  const navigate = useNavigate();
+
+  const fetchSubscriptions = async (user: string) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/api/users/subscriptions/${user}`,
+        { withCredentials: true }
+      );
+      setSubs(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (currUser?._id) {
+      fetchSubscriptions(currUser._id);
+    }
+  }, [currUser]);
+
+  console.log(subs);
   return (
     <Container>
       <Wrapper>
@@ -221,6 +273,23 @@ function Menu({
           )}
           {dark ? "Light" : "Dark"} Mode
         </Item>
+        {subs?.length && currUser && (
+          <SubscriptionsContainer>
+            <Hr />
+            <Text>
+              <SubName>Subscriptions</SubName>
+            </Text>
+            {subs.map((sub) => (
+              <Subscription key={sub._id}>
+                <SubAvatar
+                  src={sub.image}
+                  onClick={() => navigate(`/channel/${sub._id}`)}
+                />
+                <SubName>{sub.name}</SubName>
+              </Subscription>
+            ))}
+          </SubscriptionsContainer>
+        )}
       </Wrapper>
     </Container>
   );
