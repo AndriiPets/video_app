@@ -80,7 +80,42 @@ const Avatar = styled.img`
   height: 32px;
   border-radius: 50%;
   background-color: #999;
+  cursor: pointer;
 `;
+
+//sort drawer
+const SortDrawer = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: ${({ theme }) => theme.text};
+  margin-top: 3px;
+`;
+
+const Content = styled.div`
+  z-index: 1;
+  background-color: ${({ theme }) => theme.soft};
+  padding: 5px 5px 5px 5px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const OptonContainer = styled.button`
+  border: none;
+  cursor: pointer;
+  padding: 5px 5px 5px 5px;
+  border-radius: 10px;
+  color: ${({ theme }) => theme.text};
+  background-color: transparent;
+  &:hover {
+    background-color: ${({ theme }) => theme.bgMain};
+  }
+`;
+
+const Option = styled.h3``;
 
 function Navbar() {
   const { currUser } = useSelector((state: RootState) => state.user);
@@ -92,6 +127,8 @@ function Navbar() {
   const [q, setQ] = useState("");
 
   const dispatch = useDispatch();
+
+  const [openOptions, setOpenOptions] = useState(false);
 
   const userLogout = async () => {
     await axios.get("http://localhost:8000/api/auth/logout", {
@@ -116,7 +153,10 @@ function Navbar() {
             <User>
               <Button onClick={() => userLogout()}>SIGN OUT</Button>
               <VideoCallIcon onClick={() => setOpen(true)} />
-              <Avatar src={currUser.image} />
+              <Avatar
+                src={currUser.image}
+                onClick={() => setOpenOptions(!openOptions)}
+              />
               {currUser.name}
             </User>
           ) : (
@@ -126,6 +166,28 @@ function Navbar() {
                 SIGN IN
               </Button>
             </Link>
+          )}
+          {openOptions && (
+            <SortDrawer>
+              <Content>
+                <OptonContainer
+                  onClick={() => {
+                    navigate(`/channel/${currUser?._id}`);
+                    setOpenOptions(false);
+                  }}
+                >
+                  <Option>My channel</Option>
+                </OptonContainer>
+                <OptonContainer
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setOpenOptions(false);
+                  }}
+                >
+                  <Option>Manage videos</Option>
+                </OptonContainer>
+              </Content>
+            </SortDrawer>
           )}
         </Wrapper>
       </Container>
