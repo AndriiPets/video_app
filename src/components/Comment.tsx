@@ -26,9 +26,12 @@ const IconBox = styled.div`
   padding: 5px 5px 5px 5px;
   border-radius: 50%;
   background-color: transparent;
+`;
 
+const Dropdown = styled.div`
   position: relative;
 `;
+
 const Avatar = styled.img`
   width: 40px;
   height: 40px;
@@ -96,7 +99,8 @@ const Drawer = styled.div`
   flex-direction: column;
   align-items: center;
   color: ${({ theme }) => theme.text};
-  margin-top: 3px;
+  top: 0;
+  right: 0;
 `;
 
 const Content = styled.div`
@@ -212,9 +216,7 @@ function Comment({ comment }: { comment: CommentType }) {
           )}
           {comment.userId === currUser?._id && !openEdit && (
             <IconWrapper>
-              <IconBox onClick={() => setDrawer(!drawer)}>
-                <MoreVert />
-
+              <Dropdown>
                 {drawer && (
                   <Drawer>
                     <Content>
@@ -227,6 +229,9 @@ function Comment({ comment }: { comment: CommentType }) {
                     </Content>
                   </Drawer>
                 )}
+              </Dropdown>
+              <IconBox onClick={() => setDrawer(!drawer)}>
+                <MoreVert />
               </IconBox>
               {/* <Edit onClick={() => setOpenEdit(true)} />
               <Delete onClick={(e) => deleteComment(e)} /> */}

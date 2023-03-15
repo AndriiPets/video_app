@@ -3,6 +3,8 @@ import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import VideoCallIcon from "@mui/icons-material/VideoCallOutlined";
+import AccountBox from "@mui/icons-material/AccountBox";
+import VideoSettings from "@mui/icons-material/VideoSettings";
 import { Menu } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -74,6 +76,7 @@ const User = styled.div`
   font-weight: 500;
   color: ${({ theme }) => theme.text};
   margin-right: 15px;
+  position: relative;
 `;
 const Avatar = styled.img`
   width: 32px;
@@ -84,17 +87,24 @@ const Avatar = styled.img`
 `;
 
 //sort drawer
+
 const SortDrawer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: ${({ theme }) => theme.text};
-  margin-top: 3px;
+  top: 0;
+  right: 0;
+`;
+
+const Dropdown = styled.div`
+  display: flex;
+  position: relative;
+  padding-top: 10px;
 `;
 
 const Content = styled.div`
-  z-index: 1;
   background-color: ${({ theme }) => theme.soft};
   padding: 5px 5px 5px 5px;
   border-radius: 10px;
@@ -103,10 +113,30 @@ const Content = styled.div`
   gap: 5px;
 `;
 
+const UserHeader = styled.div`
+  display: flex;
+  gap: 10px;
+  margin: 3px 3px 3px 3px;
+  padding: 10px 10px 10px 10px;
+`;
+
+const UserHeaderDesc = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Hr = styled.hr`
+  margin: 3px 0px;
+  border: 0.1px solid ${({ theme }) => theme.text};
+`;
+
 const OptonContainer = styled.button`
   border: none;
+  display: flex;
+  gap: 10px;
   cursor: pointer;
-  padding: 5px 5px 5px 5px;
+  padding: 10px 10px 10px 10px;
+  margin: 3px 3px 3px 3px;
   border-radius: 10px;
   color: ${({ theme }) => theme.text};
   background-color: transparent;
@@ -115,7 +145,11 @@ const OptonContainer = styled.button`
   }
 `;
 
-const Option = styled.h3``;
+const Option = styled.h3`
+  white-space: nowrap;
+`;
+
+const Text = styled.p``;
 
 function Navbar() {
   const { currUser } = useSelector((state: RootState) => state.user);
@@ -151,8 +185,45 @@ function Navbar() {
           </Search>
           {currUser ? (
             <User>
-              <Button onClick={() => userLogout()}>SIGN OUT</Button>
-              <VideoCallIcon onClick={() => setOpen(true)} />
+              <Dropdown>
+                {!openOptions && (
+                  <Button onClick={() => userLogout()}>SIGN OUT</Button>
+                )}
+                <VideoCallIcon onClick={() => setOpen(true)} />
+                {openOptions && (
+                  <SortDrawer>
+                    <Content>
+                      <UserHeader>
+                        <Avatar src={currUser.image} />
+                        <UserHeaderDesc>
+                          <Text>{currUser.name}</Text>
+                          <Text>{currUser.email}</Text>
+                        </UserHeaderDesc>
+                      </UserHeader>
+                      <Hr />
+                      <OptonContainer
+                        onClick={() => {
+                          navigate(`/channel/${currUser?._id}`);
+                          setOpenOptions(false);
+                        }}
+                      >
+                        <AccountBox />
+                        <Option>My channel</Option>
+                      </OptonContainer>
+                      <OptonContainer
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setOpenOptions(false);
+                        }}
+                      >
+                        <VideoSettings />
+                        <Option>Manage videos</Option>
+                      </OptonContainer>
+                    </Content>
+                  </SortDrawer>
+                )}
+              </Dropdown>
+
               <Avatar
                 src={currUser.image}
                 onClick={() => setOpenOptions(!openOptions)}
@@ -166,28 +237,6 @@ function Navbar() {
                 SIGN IN
               </Button>
             </Link>
-          )}
-          {openOptions && (
-            <SortDrawer>
-              <Content>
-                <OptonContainer
-                  onClick={() => {
-                    navigate(`/channel/${currUser?._id}`);
-                    setOpenOptions(false);
-                  }}
-                >
-                  <Option>My channel</Option>
-                </OptonContainer>
-                <OptonContainer
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setOpenOptions(false);
-                  }}
-                >
-                  <Option>Manage videos</Option>
-                </OptonContainer>
-              </Content>
-            </SortDrawer>
           )}
         </Wrapper>
       </Container>

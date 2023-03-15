@@ -20,6 +20,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #000000ac;
+  z-index: 2;
 `;
 
 const Wrapper = styled.div`
