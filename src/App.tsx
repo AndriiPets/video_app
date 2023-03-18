@@ -19,6 +19,7 @@ import ChannelPage from "./pages/Channel";
 import Search from "./pages/Search";
 import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
+import CreatorPage from "./pages/CreatorPage";
 
 const Container = styled.div``;
 
@@ -66,6 +67,9 @@ function App() {
                       </Route>
                       <Route path="channel">
                         <Route path=":id" element={<ChannelPage />} />
+                      </Route>
+                      <Route path="manage">
+                        <Route path=":id" element={<CreatorPage />} />
                       </Route>
                     </Route>
                   </Routes>
