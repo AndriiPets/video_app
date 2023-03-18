@@ -212,7 +212,7 @@ function Navbar() {
                       </OptonContainer>
                       <OptonContainer
                         onClick={(e) => {
-                          e.preventDefault();
+                          navigate(`/manage/${currUser?._id}`);
                           setOpenOptions(false);
                         }}
                       >
