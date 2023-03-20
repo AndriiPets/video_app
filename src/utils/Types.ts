@@ -25,6 +25,10 @@ export interface CreatorProps {
   video: Video;
 }
 
+export interface VideoEditProps {
+  type: string;
+}
+
 export interface Channel {
   _id?: string;
   name: string;

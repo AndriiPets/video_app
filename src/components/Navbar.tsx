@@ -240,7 +240,7 @@ function Navbar() {
           )}
         </Wrapper>
       </Container>
-      {open && <Upload setOpen={setOpen} />}
+      {open && <Upload setOpen={setOpen} type="upload" />}
     </>
   );
 }
