@@ -20,6 +20,7 @@ import Search from "./pages/Search";
 import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
 import CreatorPage from "./pages/CreatorPage";
+import SearchByTag from "./pages/SearchByTag";
 
 const Container = styled.div``;
 
@@ -61,6 +62,7 @@ function App() {
                         element={<Home type="sub" />}
                       />
                       <Route path="search" element={<Search />} />
+                      <Route path="tag" element={<SearchByTag />} />
                       <Route path="signin" element={<Signin />} />
                       <Route path="video">
                         <Route path=":id" element={<Video />} />

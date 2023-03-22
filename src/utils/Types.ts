@@ -23,6 +23,8 @@ export interface CardProps {
 
 export interface CreatorProps {
   video: Video;
+  setEdit: any;
+  edit: any;
 }
 
 export interface VideoEditProps {

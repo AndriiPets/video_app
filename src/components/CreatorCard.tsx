@@ -76,7 +76,7 @@ const OptionButton = styled.div`
 `;
 export interface Card {}
 
-function CreatorCard({ video }: CreatorProps) {
+function CreatorCard({ video, edit, setEdit }: CreatorProps) {
   const [deleted, setDeleted] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -142,7 +142,7 @@ function CreatorCard({ video }: CreatorProps) {
           </Likes>
           <Options>
             <Content>
-              <OptionButton onClick={() => setEditModalOpen(true)}>
+              <OptionButton onClick={() => setEdit(true)}>
                 <Edit />
                 Edit
               </OptionButton>
@@ -155,13 +155,7 @@ function CreatorCard({ video }: CreatorProps) {
             </Content>
           </Options>
           {modalOpen && <Modal {...modalOptions} />}
-          {editModalOpen && (
-            <Upload
-              setOpen={setEditModalOpen}
-              type="edit"
-              videoToEdit={video}
-            />
-          )}
+          {edit && <Upload setOpen={setEdit} type="edit" videoToEdit={video} />}
         </Container>
       )}
     </div>
