@@ -45,6 +45,7 @@ function CreatorPage() {
   const [videos, setVideos] = useState([]);
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];
+  const [openEdit, setOpenEdit] = useState(false);
 
   const loadVideos = async () => {
     try {
@@ -61,7 +62,7 @@ function CreatorPage() {
   useEffect(() => {
     loadVideos();
     dispatch(open());
-  }, []);
+  }, [openEdit]);
 
   return (
     <Container>
@@ -87,7 +88,12 @@ function CreatorPage() {
         </Column>
       </VideosTitle>
       {videos.map((video: CardProps["video"]) => (
-        <CreatorCard key={video._id} video={video} />
+        <CreatorCard
+          key={video._id}
+          video={video}
+          edit={openEdit}
+          setEdit={setOpenEdit}
+        />
       ))}
     </Container>
   );
