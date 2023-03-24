@@ -13,7 +13,6 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
 import Upload from "./Upload";
-import logoImg from "../img/Rocket-PNG-Clipart.png";
 import Logo from "./LogoMenu";
 
 const Container = styled.div`
