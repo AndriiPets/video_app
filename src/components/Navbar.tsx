@@ -5,7 +5,6 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import VideoCallIcon from "@mui/icons-material/VideoCallOutlined";
 import AccountBox from "@mui/icons-material/AccountBox";
 import VideoSettings from "@mui/icons-material/VideoSettings";
-import { Menu } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
