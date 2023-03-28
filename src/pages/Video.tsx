@@ -126,6 +126,8 @@ function VideoElement() {
     text: currVideo?.desc || " ",
     tags: currVideo?.tags || [],
   };
+  //todo add a view
+  //todo add a way to change avatar and image
 
   const navigate = useNavigate();
 
