@@ -266,7 +266,7 @@ function Menu({
           )}
           {dark ? "Light" : "Dark"} Mode
         </Item>
-        {subs?.length && currUser && (
+        {currUser && (
           <SubscriptionsContainer>
             <Hr />
             <Text>

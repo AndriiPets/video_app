@@ -58,6 +58,8 @@ function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const deafultUserImage =
+    "https://cdn-icons-png.flaticon.com/512/53/53104.png";
 
   const navigate = useNavigate();
 
@@ -79,6 +81,28 @@ function Signin() {
     } catch (err) {
       dispatch(loginFaliure());
     }
+  };
+
+  const register = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/auth/signup/",
+        {
+          name,
+          password,
+          email,
+          image: deafultUserImage,
+        },
+        { withCredentials: true }
+      );
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+    login(e);
   };
 
   const signinWithGoogle = async () => {
@@ -132,7 +156,7 @@ function Signin() {
           placeholder="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button>Sign up</Button>
+        <Button onClick={(e) => register(e)}>Sign up</Button>
       </Wrapper>
     </Container>
   );

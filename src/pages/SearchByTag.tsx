@@ -35,7 +35,8 @@ const Text = styled.p``;
 
 function SearchByTag() {
   const [videos, setVideos] = useState<Video[]>([]);
-  const tag = "#" + useLocation().search.split("=")[1];
+  const tag = useLocation().search;
+  const tagName = "#" + tag?.split("=")[1];
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -57,7 +58,7 @@ function SearchByTag() {
     <Container>
       <Wrapper>
         <TitleWrapper>
-          <Title>{tag}</Title>
+          <Title>{tagName}</Title>
           <Text>{videos.length} videos</Text>
         </TitleWrapper>
         <VideosWrapper>
