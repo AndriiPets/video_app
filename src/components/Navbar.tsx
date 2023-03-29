@@ -20,7 +20,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSide};
   height: 56px;
   color: ${({ theme }) => theme.text};
-  z-index: 1;
+  z-index: 5;
 `;
 
 const Wrapper = styled.div`

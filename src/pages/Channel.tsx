@@ -15,16 +15,12 @@ import BottomModal from "../components/ModalBottom";
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
-  position: relative;
-  height: 100vh;
+  gap: 16px;
 `;
 
 const VideosWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
 `;
 
 const ChannelHeader = styled.div`
