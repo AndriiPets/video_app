@@ -12,11 +12,13 @@ import { useSelector } from "react-redux";
 import Edit from "@mui/icons-material/Edit";
 import Camera from "@mui/icons-material/PhotoCameraOutlined";
 import BottomModal from "../components/ModalBottom";
+import ImageEditModal from "../components/ImageEditModal";
 
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+  position: relative;
 `;
 
 const VideosWrapper = styled.div`
@@ -48,6 +50,9 @@ const ChannelInfo = styled.div`
 const Title = styled.h1`
   font-weight: 500;
 `;
+
+const Text = styled.p``;
+
 const SubCount = styled.h5`
   font-weight: 200;
 `;
@@ -84,6 +89,45 @@ const AvatarWrapper = styled.div`
   border-radius: 50%;
 `;
 
+const EditContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  color: ${({ theme }) => theme.text};
+  width: 100%;
+`;
+
+const EditGeneralWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+const EditWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.bgSide};
+  padding: 10px 10px 10px 10px;
+  gap: 10px;
+  border-radius: 3px;
+`;
+
+const Input = styled.input`
+  border: 1px solid ${({ theme }) => theme.soft};
+  color: ${({ theme }) => theme.text};
+  border-radius: 3px;
+  padding: 10px;
+  background-color: transparent;
+`;
+
+const Desc = styled.textarea`
+  border: 1px solid ${({ theme }) => theme.soft};
+  color: ${({ theme }) => theme.text};
+  border-radius: 3px;
+  padding: 10px;
+  background-color: transparent;
+`;
+
 const EditImage = styled.div`
   display: flex;
   justify-content: center;
@@ -102,9 +146,14 @@ function ChannelPage() {
   const [userInfo, setUserInfo] = useState<Channel>();
   const [editState, setEditState] = useState(false);
   const [confirmEdit, setConfirmEdit] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const path = useLocation().pathname.split("/")[2];
   const { menu } = useSelector((state: RootState) => state.ui);
   const { currUser } = useSelector((state: RootState) => state.user);
+
+  //upgate user functionality
+  const [updatedUsername, setUpdatedUsername] = useState(userInfo?.name);
+  const [updatedUserImage, setUpdatedUserImage] = useState(userInfo?.image);
 
   const dispatch = useDispatch();
 
@@ -132,6 +181,11 @@ function ChannelPage() {
     }
   };
 
+  const modalOptions = {
+    callback: setUpdatedUserImage,
+    setIsOpen: setOpenModal,
+  };
+
   useEffect(() => {
     loadVideos();
     loadUser();
@@ -141,14 +195,20 @@ function ChannelPage() {
     dispatch(open());
   }, []);
 
+  useEffect(() => {
+    updatedUserImage && console.log(`updatedImageURL: ${updatedUserImage}`);
+  }, [updatedUserImage]);
+
   return (
     <Container>
       <ChannelHeader>
         <Wrapper>
           <AvatarWrapper>
-            <ChannelAvatar src={userInfo?.image} />
+            <ChannelAvatar
+              src={updatedUserImage ? updatedUserImage : userInfo?.image}
+            />
             {editState && (
-              <EditImage>
+              <EditImage onClick={() => setOpenModal(!openModal)}>
                 <Camera />
               </EditImage>
             )}
@@ -178,8 +238,27 @@ function ChannelPage() {
         </VideosWrapper>
       )}
       {editState && (
+        <EditContainer>
+          <EditGeneralWrapper>
+            <Title>General</Title>
+            <EditWrapper>
+              <Text>Channel Name:</Text>
+              <Input
+                type="text"
+                value={userInfo?.name}
+                name="Channel Name"
+                placeholder="Channel Name"
+              />
+              <Text>Channel Description</Text>
+              <Desc placeholder="Description" rows={8} name="desc" />
+            </EditWrapper>
+          </EditGeneralWrapper>
+        </EditContainer>
+      )}
+      {editState && (
         <BottomModal setConfirm={setConfirmEdit} setCancel={setEditState} />
       )}
+      {openModal && <ImageEditModal {...modalOptions} />}
     </Container>
   );
 }
