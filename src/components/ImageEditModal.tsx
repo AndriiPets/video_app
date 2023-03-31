@@ -155,7 +155,7 @@ function ImageEditModal({ callback, setIsOpen }: ImageModalOptions) {
               setIsOpen(false);
             }}
           >
-            Save
+            Upload
           </ConfirmBtn>
           <Text>Use a URL</Text>
         </BottomRow>

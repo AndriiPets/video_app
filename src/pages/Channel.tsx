@@ -141,6 +141,11 @@ const EditImage = styled.div`
   top: 0;
 `;
 
+interface Inputs {
+  name?: string;
+  image?: string;
+}
+
 function ChannelPage() {
   const [videos, setVideos] = useState([]);
   const [userInfo, setUserInfo] = useState<Channel>();
@@ -152,8 +157,10 @@ function ChannelPage() {
   const { currUser } = useSelector((state: RootState) => state.user);
 
   //upgate user functionality
-  const [updatedUsername, setUpdatedUsername] = useState(userInfo?.name);
-  const [updatedUserImage, setUpdatedUserImage] = useState(userInfo?.image);
+  const [updatedUsername, setUpdatedUsername] = useState(userInfo?.name || "");
+  const [updatedUserImage, setUpdatedUserImage] = useState(
+    userInfo?.image || ""
+  );
 
   const dispatch = useDispatch();
 
@@ -164,6 +171,7 @@ function ChannelPage() {
         { withCredentials: true }
       );
       setUserInfo(res.data);
+      setUpdatedUsername(res.data.name);
     } catch (err) {
       console.log(err);
     }
@@ -196,8 +204,10 @@ function ChannelPage() {
   }, []);
 
   useEffect(() => {
-    updatedUserImage && console.log(`updatedImageURL: ${updatedUserImage}`);
-  }, [updatedUserImage]);
+    console.log(
+      `user name is: ${updatedUsername} user image is: ${updatedUserImage}`
+    );
+  }, [updatedUsername, updatedUserImage]);
 
   return (
     <Container>
@@ -245,9 +255,10 @@ function ChannelPage() {
               <Text>Channel Name:</Text>
               <Input
                 type="text"
-                value={userInfo?.name}
-                name="Channel Name"
+                value={updatedUsername}
+                name="name"
                 placeholder="Channel Name"
+                onChange={(e) => setUpdatedUsername(e.target.value)}
               />
               <Text>Channel Description</Text>
               <Desc placeholder="Description" rows={8} name="desc" />
