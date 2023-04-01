@@ -9,6 +9,7 @@ import { open, close } from "../redux/uiSlice";
 import { useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
+import { loginSuccess } from "../redux/userSlice";
 import Edit from "@mui/icons-material/Edit";
 import Camera from "@mui/icons-material/PhotoCameraOutlined";
 import BottomModal from "../components/ModalBottom";
@@ -155,6 +156,7 @@ function ChannelPage() {
   const path = useLocation().pathname.split("/")[2];
   const { menu } = useSelector((state: RootState) => state.ui);
   const { currUser } = useSelector((state: RootState) => state.user);
+  const [reRender, setReRender] = useState(false);
 
   //upgate user functionality
   const [updatedUsername, setUpdatedUsername] = useState(userInfo?.name || "");
@@ -189,6 +191,23 @@ function ChannelPage() {
     }
   };
 
+  const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:8000/api/users/${userInfo?._id}`,
+        {
+          name: updatedUsername ? updatedUsername : userInfo?.name,
+          image: updatedUserImage ? updatedUserImage : userInfo?.image,
+        },
+        { withCredentials: true }
+      );
+      setReRender(!reRender);
+      dispatch(loginSuccess(res.data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const modalOptions = {
     callback: setUpdatedUserImage,
     setIsOpen: setOpenModal,
@@ -197,7 +216,7 @@ function ChannelPage() {
   useEffect(() => {
     loadVideos();
     loadUser();
-  }, []);
+  }, [reRender]);
 
   useEffect(() => {
     dispatch(open());
@@ -267,7 +286,7 @@ function ChannelPage() {
         </EditContainer>
       )}
       {editState && (
-        <BottomModal setConfirm={setConfirmEdit} setCancel={setEditState} />
+        <BottomModal setConfirm={handleUpload} setCancel={setEditState} />
       )}
       {openModal && <ImageEditModal {...modalOptions} />}
     </Container>
