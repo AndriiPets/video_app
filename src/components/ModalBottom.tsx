@@ -58,7 +58,14 @@ function ModalBottom({ setConfirm, setCancel }: Modal) {
     <Container>
       <Content>
         <Buttons>
-          <ConfirmButton>Save</ConfirmButton>
+          <ConfirmButton
+            onClick={(e) => {
+              setConfirm(e);
+              setCancel(false);
+            }}
+          >
+            Save
+          </ConfirmButton>
           <CancelButton onClick={() => setCancel(false)}>Cancel</CancelButton>
         </Buttons>
         <Gap />

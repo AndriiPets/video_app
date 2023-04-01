@@ -67,18 +67,32 @@ const Button = styled.button`
   gap: 5px;
 `;
 
+const Button2 = styled.button`
+  padding: 5px 15px;
+
+  background-color: transparent;
+  border: 1px solid #3ea6ff;
+  color: #3ea6ff;
+  border-radius: 3px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
 const User = styled.div`
   align-items: center;
   display: flex;
   gap: 10px;
   font-weight: 500;
   color: ${({ theme }) => theme.text};
-  margin-right: 15px;
+  margin-right: 25px;
   position: relative;
 `;
 const Avatar = styled.img`
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: #999;
   cursor: pointer;
@@ -183,12 +197,13 @@ function Navbar() {
           </Search>
           {currUser ? (
             <User>
-              <Dropdown>
-                {!openOptions && (
-                  <Button onClick={() => userLogout()}>SIGN OUT</Button>
-                )}
-                <VideoCallIcon onClick={() => setOpen(true)} />
-                {openOptions && (
+              {!openOptions && (
+                <Button2 onClick={() => userLogout()}>SIGN OUT</Button2>
+              )}
+              <VideoCallIcon onClick={() => setOpen(true)} />
+
+              {openOptions && (
+                <Dropdown>
                   <SortDrawer>
                     <Content>
                       <UserHeader>
@@ -219,14 +234,13 @@ function Navbar() {
                       </OptonContainer>
                     </Content>
                   </SortDrawer>
-                )}
-              </Dropdown>
+                </Dropdown>
+              )}
 
               <Avatar
                 src={currUser.image}
                 onClick={() => setOpenOptions(!openOptions)}
               />
-              {currUser.name}
             </User>
           ) : (
             <Link to="signin" style={{ textDecoration: "none" }}>

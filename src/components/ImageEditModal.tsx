@@ -142,6 +142,7 @@ function ImageEditModal({ callback, setIsOpen }: ImageModalOptions) {
         ) : (
           <Input
             type="file"
+            name="image"
             accept="image/*"
             onChange={(e) =>
               e.target.files && setEditedImage(e.target.files[0])
