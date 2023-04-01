@@ -1,0 +1,6 @@
+Dockerfile
+.dockerignore
+.gitignore
+README.md
+.env
+tsconfig.json
