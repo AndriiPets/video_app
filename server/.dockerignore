@@ -2,5 +2,6 @@ Dockerfile
 .dockerignore
 .gitignore
 README.md
-.env
 tsconfig.json
+build
+node_modules
