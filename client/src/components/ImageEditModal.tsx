@@ -78,6 +78,18 @@ const ConfirmBtn = styled.button`
   transition: all 0.25s ease;
 `;
 
+const DisabledBtn = styled.button`
+  cursor: pointer;
+  font-weight: 500;
+  padding: 11px 28px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  border: none;
+  color: #2c3e50;
+  background: #fcfcfc;
+  transition: all 0.25s ease;
+`;
+
 export interface ImageModalOptions {
   callback: any;
   setIsOpen: any;
@@ -150,14 +162,19 @@ function ImageEditModal({ callback, setIsOpen }: ImageModalOptions) {
           />
         )}
         <BottomRow>
-          <ConfirmBtn
-            onClick={() => {
-              callback(downloadUrl);
-              setIsOpen(false);
-            }}
-          >
-            Upload
-          </ConfirmBtn>
+          {imgPerc < 100 ? (
+            <DisabledBtn>Upload</DisabledBtn>
+          ) : (
+            <ConfirmBtn
+              onClick={() => {
+                callback(downloadUrl);
+                setIsOpen(false);
+              }}
+            >
+              Upload
+            </ConfirmBtn>
+          )}
+
           <Text>Use a URL</Text>
         </BottomRow>
       </Content>

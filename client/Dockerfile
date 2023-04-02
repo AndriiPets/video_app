@@ -1,14 +1,17 @@
-FROM node:10.16-alpine
+FROM node:16
+
+RUN mkdir /app
 
 WORKDIR /app
 
-COPY ./package.json ./
+COPY ./package.json /app/
 
-COPY ./package-lock.json ./
+COPY ./package-lock.json /app/
+
 
 RUN npm install 
 
-COPY . .
+COPY . /app/
 
 EXPOSE 3000
 
