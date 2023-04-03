@@ -154,7 +154,6 @@ function ChannelPage() {
   const [confirmEdit, setConfirmEdit] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const path = useLocation().pathname.split("/")[2];
-  const { menu } = useSelector((state: RootState) => state.ui);
   const { currUser } = useSelector((state: RootState) => state.user);
   const [reRender, setReRender] = useState(false);
 
