@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Close from "@mui/icons-material/Close";
+import Check from "@mui/icons-material/Check";
 import {
   getStorage,
   ref,
@@ -35,6 +36,7 @@ const Content = styled.div`
   flex-direction: column;
   padding: 10px 10px 10px 10px;
   gap: 15px;
+  width: 277px;
 `;
 
 const Input = styled.input`
@@ -90,6 +92,18 @@ const DisabledBtn = styled.button`
   transition: all 0.25s ease;
 `;
 
+const Checkmark = styled.div`
+  display: flex;
+  border: 1px solid ${({ theme }) => theme.soft};
+  border-radius: 3px;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+  &:hover {
+    background-color: ${({ theme }) => theme.soft};
+  }
+`;
+
 export interface ImageModalOptions {
   callback: any;
   setIsOpen: any;
@@ -98,6 +112,7 @@ export interface ImageModalOptions {
 function ImageEditModal({ callback, setIsOpen }: ImageModalOptions) {
   const [editedImage, setEditedImage] = useState<File | null>(null);
   const [downloadUrl, setDownloadUrl] = useState("");
+  const [useURL, setUseURL] = useState(false);
   const [imgPerc, setImgPerc] = useState(0);
 
   const uploadFile = (file: File) => {
@@ -149,20 +164,33 @@ function ImageEditModal({ callback, setIsOpen }: ImageModalOptions) {
             <Close />
           </IconWrapper>
         </TitleWrapper>
-        {imgPerc > 0 ? (
-          "Uploading:" + imgPerc + "%"
-        ) : (
+        {useURL ? (
           <Input
-            type="file"
+            type="text"
             name="image"
-            accept="image/*"
-            onChange={(e) =>
-              e.target.files && setEditedImage(e.target.files[0])
-            }
+            accept="text"
+            placeholder="Paste a URL here"
+            onChange={(e) => setDownloadUrl(e.target.value)}
           />
+        ) : (
+          <div>
+            {imgPerc > 0 ? (
+              "Uploading:" + imgPerc + "%"
+            ) : (
+              <Input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={(e) =>
+                  e.target.files && setEditedImage(e.target.files[0])
+                }
+              />
+            )}
+          </div>
         )}
+
         <BottomRow>
-          {imgPerc < 100 ? (
+          {downloadUrl.length < 1 ? (
             <DisabledBtn>Upload</DisabledBtn>
           ) : (
             <ConfirmBtn
@@ -174,6 +202,9 @@ function ImageEditModal({ callback, setIsOpen }: ImageModalOptions) {
               Upload
             </ConfirmBtn>
           )}
+          <Checkmark onClick={() => setUseURL(!useURL)}>
+            {useURL && <Check />}
+          </Checkmark>
 
           <Text>Use a URL</Text>
         </BottomRow>
