@@ -17,6 +17,17 @@ import cors from "cors";
 dotenv.config();
 
 const app: Application = express();
+app.use(
+  cors({
+    credentials: true,
+    origin: [
+      "https://https://astrotube.vercel.app",
+      "http://localhost:3000",
+      "https://astrotube-gtrbnzy6q-andriipets.vercel.app",
+    ],
+    optionsSuccessStatus: 200,
+  })
+);
 
 const PORT = process.env.PORT || 8000;
 
@@ -35,17 +46,7 @@ const connect = () => {
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(
-  cors({
-    credentials: true,
-    origin: [
-      "https://https://astrotube.vercel.app",
-      "http://localhost:3000",
-      "https://astrotube-gtrbnzy6q-andriipets.vercel.app",
-    ],
-    optionsSuccessStatus: 200,
-  })
-);
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", usersRoute);
 app.use("/api/videos", videoRoute);
