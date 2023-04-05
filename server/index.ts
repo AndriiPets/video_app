@@ -38,7 +38,11 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: "https://https://astrotube.vercel.app/",
+    origin: [
+      "https://https://astrotube.vercel.app",
+      "http://localhost:3000",
+      "https://astrotube-gtrbnzy6q-andriipets.vercel.app",
+    ],
     optionsSuccessStatus: 200,
   })
 );
