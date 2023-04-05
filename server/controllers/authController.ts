@@ -41,6 +41,7 @@ export const signin = async (
     res
       .cookie("access_token", token, {
         httpOnly: true,
+        sameSite: "none",
       })
       .status(200)
       .json(user);
@@ -68,7 +69,7 @@ export const googleAuth = async (
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || "");
 
       res
-        .cookie("access_token", token, { httpOnly: true })
+        .cookie("access_token", token, { httpOnly: true, sameSite: "none" })
         .status(200)
         .json(user._doc);
     } else {
@@ -83,7 +84,7 @@ export const googleAuth = async (
       );
 
       res
-        .cookie("access_token", token, { httpOnly: true })
+        .cookie("access_token", token, { httpOnly: true, sameSite: "none" })
         .status(200)
         .json(savedUser._doc);
     }

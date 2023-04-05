@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { Video } from "../utils/Types";
 import axios from "axios";
 import Card from "../components/Card";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   color: ${({ theme }) => theme.text};
@@ -41,10 +42,9 @@ function SearchByTag() {
 
   useEffect(() => {
     const fetchVideos = async () => {
-      const res = await axios.get(
-        `http://localhost:8000/api/videos/tags${tag}`,
-        { withCredentials: true }
-      );
+      const res = await axios.get(`${serverURL}/api/videos/tags${tag}`, {
+        withCredentials: true,
+      });
       setVideos(res.data);
     };
     fetchVideos();

@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
 import Upload from "./Upload";
 import Logo from "./LogoMenu";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   position: sticky;
@@ -177,7 +178,7 @@ function Navbar() {
   const [openOptions, setOpenOptions] = useState(false);
 
   const userLogout = async () => {
-    await axios.get("http://localhost:8000/api/auth/logout", {
+    await axios.get(`${serverURL}/api/auth/logout`, {
       withCredentials: true,
     });
     dispatch(logout());

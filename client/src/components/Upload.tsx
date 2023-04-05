@@ -10,6 +10,7 @@ import app from "../firebase";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { VideoEditProps, Video } from "../utils/Types";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   width: 100%;
@@ -179,7 +180,7 @@ function Upload({ setOpen, type, videoToEdit }: UploadOptions) {
     e.preventDefault();
     console.log(inputs);
     const res = await axios.post(
-      "http://localhost:8000/api/videos",
+      `${serverURL}/api/videos`,
       { ...inputs, tags },
       { withCredentials: true }
     );
@@ -191,7 +192,7 @@ function Upload({ setOpen, type, videoToEdit }: UploadOptions) {
   const handleEdit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     await axios.put(
-      `http://localhost:8000/api/videos/${videoToEdit?._id}`,
+      `${serverURL}/api/videos/${videoToEdit?._id}`,
       { title: updatedTitle, desc: updatedDesc, tags: updatedTags },
       { withCredentials: true }
     );

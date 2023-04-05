@@ -6,6 +6,7 @@ import Delete from "@mui/icons-material/Delete";
 import axios from "axios";
 import Modal from "./Modal";
 import Upload from "./Upload";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   display: flex;
@@ -92,7 +93,7 @@ function CreatorCard({ video, edit, setEdit }: CreatorProps) {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-    await axios.delete(`http://localhost:8000/api/videos/${video._id}`, {
+    await axios.delete(`${serverURL}/api/videos/${video._id}`, {
       withCredentials: true,
     });
     setDeleted(false);

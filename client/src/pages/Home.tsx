@@ -7,6 +7,7 @@ import { open, close } from "../redux/uiSlice";
 import { useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   display: flex;
@@ -25,7 +26,7 @@ function Home({ type }: { type: string }) {
 
   const loadVideos = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/videos/${type}`, {
+      const res = await axios.get(`${serverURL}/api/videos/${type}`, {
         withCredentials: true,
       });
       setVideos(res.data);

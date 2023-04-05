@@ -20,6 +20,7 @@ import Recommendation from "../components/Recommendation";
 import { open, close } from "../redux/uiSlice";
 import VideoPlayer from "../components/VideoComponent";
 import DescriptionContainer from "../components/DescriptionBox";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   display: flex;
@@ -154,10 +155,10 @@ function VideoElement() {
     const fetchData = async () => {
       try {
         const videoRes = await axios.get(
-          `http://localhost:8000/api/videos/find/${path}`
+          `${serverURL}/api/videos/find/${path}`
         );
         const channelRes = await axios.get(
-          `http://localhost:8000/api/users/find/${videoRes.data.userId}`
+          `${serverURL}/api/users/find/${videoRes.data.userId}`
         );
 
         setChannel(channelRes.data);
@@ -174,7 +175,7 @@ function VideoElement() {
 
   const handleLike = async () => {
     await axios.put(
-      `http://localhost:8000/api/users/like/${currVideo?._id}`,
+      `${serverURL}/api/users/like/${currVideo?._id}`,
       {},
       { withCredentials: true }
     );
@@ -183,7 +184,7 @@ function VideoElement() {
 
   const handleDislike = async () => {
     await axios.put(
-      `http://localhost:8000/api/users/dislike/${currVideo?._id}`,
+      `${serverURL}/api/users/dislike/${currVideo?._id}`,
       {},
       { withCredentials: true }
     );
