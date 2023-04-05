@@ -14,6 +14,7 @@ import Edit from "@mui/icons-material/Edit";
 import Camera from "@mui/icons-material/PhotoCameraOutlined";
 import BottomModal from "../components/ModalBottom";
 import ImageEditModal from "../components/ImageEditModal";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   display: flex;
@@ -167,10 +168,9 @@ function ChannelPage() {
 
   const loadUser = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/api/users/find/${path}`,
-        { withCredentials: true }
-      );
+      const res = await axios.get(`${serverURL}/api/users/find/${path}`, {
+        withCredentials: true,
+      });
       setUserInfo(res.data);
       setUpdatedUsername(res.data.name);
     } catch (err) {
@@ -180,10 +180,9 @@ function ChannelPage() {
 
   const loadVideos = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/api/videos/channel/${path}`,
-        { withCredentials: true }
-      );
+      const res = await axios.get(`${serverURL}/api/videos/channel/${path}`, {
+        withCredentials: true,
+      });
       setVideos(res.data);
     } catch (err) {
       console.log(err);
@@ -193,7 +192,7 @@ function ChannelPage() {
   const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       const res = await axios.put(
-        `http://localhost:8000/api/users/${userInfo?._id}`,
+        `${serverURL}/api/users/${userInfo?._id}`,
         {
           name: updatedUsername ? updatedUsername : userInfo?.name,
           image: updatedUserImage ? updatedUserImage : userInfo?.image,

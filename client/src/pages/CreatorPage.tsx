@@ -7,6 +7,7 @@ import Card from "../components/Card";
 import CreatorCard from "../components/CreatorCard";
 import { open, close } from "../redux/uiSlice";
 import { CardProps } from "../utils/Types";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   display: flex;
@@ -49,10 +50,9 @@ function CreatorPage() {
 
   const loadVideos = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/api/videos/channel/${path}`,
-        { withCredentials: true }
-      );
+      const res = await axios.get(`${serverURL}/api/videos/channel/${path}`, {
+        withCredentials: true,
+      });
       setVideos(res.data);
     } catch (err) {
       console.log(err);

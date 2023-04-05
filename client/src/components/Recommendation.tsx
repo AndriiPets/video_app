@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { CardProps } from "../utils/Types";
 import Card from "./Card";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   flex: 2;
@@ -13,10 +14,9 @@ function Recommendation({ tags }: { tags: string[] }) {
 
   useEffect(() => {
     const fetchVideos = async () => {
-      const res = await axios.get(
-        `http://localhost:8000/api/videos/tags?tags=${tags}`,
-        { withCredentials: true }
-      );
+      const res = await axios.get(`${serverURL}/api/videos/tags?tags=${tags}`, {
+        withCredentials: true,
+      });
       setVideos(res.data);
     };
     fetchVideos();

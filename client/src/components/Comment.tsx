@@ -7,6 +7,7 @@ import { Edit, Delete, MoreVert } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import Modal from "./Modal";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   display: flex;
@@ -142,7 +143,7 @@ function Comment({ comment }: { comment: CommentType }) {
   useEffect(() => {
     const fetchChannel = async () => {
       const res = await axios.get(
-        `http://localhost:8000/api/users/find/${comment.userId}`,
+        `${serverURL}/api/users/find/${comment.userId}`,
         { withCredentials: true }
       );
       setChannel(res.data);
@@ -154,7 +155,7 @@ function Comment({ comment }: { comment: CommentType }) {
     e.preventDefault();
 
     await axios.put(
-      `http://localhost:8000/api/comments/edit/${comment._id}`,
+      `${serverURL}/api/comments/edit/${comment._id}`,
       { desc: updatedComment },
       { withCredentials: true }
     );
@@ -168,7 +169,7 @@ function Comment({ comment }: { comment: CommentType }) {
   ) => {
     e.preventDefault();
 
-    await axios.delete(`http://localhost:8000/api/comments/${comment._id}`, {
+    await axios.delete(`${serverURL}/api/comments/${comment._id}`, {
       withCredentials: true,
     });
     setDeleted(false);

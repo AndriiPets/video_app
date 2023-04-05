@@ -6,6 +6,7 @@ import Card from "../components/Card";
 import { Video } from "../utils/Types";
 import { open, close } from "../redux/uiSlice";
 import { useDispatch } from "react-redux";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   display: flex;
@@ -20,9 +21,7 @@ function Search() {
 
   useEffect(() => {
     const fetchVideos = async () => {
-      const res = await axios.get(
-        `http://localhost:8000/api/videos/search${query}`
-      );
+      const res = await axios.get(`${serverURL}/api/videos/search${query}`);
       setVideos(res.data);
     };
     fetchVideos();

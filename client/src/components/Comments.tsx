@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import SortIcon from "@mui/icons-material/SortSharp";
 import OptionDrawer from "./OptionDrawer";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   color: ${({ theme }) => theme.text};
@@ -131,7 +132,7 @@ function Comments({ videoId }: { videoId: string | undefined }) {
     e.preventDefault();
 
     await axios.post(
-      "http://localhost:8000/api/comments",
+      `${serverURL}/api/comments`,
       {
         desc: comment,
         videoId: videoId,
@@ -155,10 +156,9 @@ function Comments({ videoId }: { videoId: string | undefined }) {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8000/api/comments/${videoId}`,
-          { withCredentials: true }
-        );
+        const res = await axios.get(`${serverURL}/api/comments/${videoId}`, {
+          withCredentials: true,
+        });
         setComments(res.data);
       } catch (err) {}
     };

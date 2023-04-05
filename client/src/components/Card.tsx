@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { CardProps, Channel } from "../utils/Types";
 import { format } from "timeago.js";
 import axios, { AxiosError } from "axios";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div<CardProps>`
   width: ${(prop) => prop.type !== "sm" && "290px"};
@@ -58,7 +59,7 @@ function Card({ type, video }: CardProps) {
   useEffect(() => {
     const fetchChannel = async () => {
       const res = await axios.get(
-        `http://localhost:8000/api/users/find/${video.userId}`
+        `${serverURL}/api/users/find/${video.userId}`
       );
       setChannel(res.data);
     };

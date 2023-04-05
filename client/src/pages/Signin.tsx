@@ -6,6 +6,7 @@ import { loginFaliure, loginStart, loginSuccess } from "../redux/userSlice";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   display: flex;
@@ -68,7 +69,7 @@ function Signin() {
     dispatch(loginStart());
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/auth/signin/",
+        `${serverURL}/api/auth/signin/`,
         {
           name,
           password,
@@ -89,7 +90,7 @@ function Signin() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/auth/signup/",
+        `${serverURL}/api/auth/signup/`,
         {
           name,
           password,
@@ -111,7 +112,7 @@ function Signin() {
       .then((result) => {
         axios
           .post(
-            "http://localhost:8000/api/auth/google",
+            `${serverURL}/api/auth/google`,
             {
               name: result.user.displayName,
               email: result.user.email,

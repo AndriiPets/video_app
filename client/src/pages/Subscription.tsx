@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { RootState } from "../redux/store";
 import { subscription } from "../redux/userSlice";
 import { Channel } from "../utils/Types";
+import serverURL from "../utils/ServerURL";
 
 const Subscribe = styled.button`
   background-color: #cc1a00;
@@ -36,7 +37,7 @@ function Subscription({ channel }: { channel: Channel | undefined }) {
 
   const handleSub = async () => {
     await axios.put(
-      `http://localhost:8000/api/users/sub/${channel?._id}`,
+      `${serverURL}/api/users/sub/${channel?._id}`,
       {},
       { withCredentials: true }
     );
@@ -45,7 +46,7 @@ function Subscription({ channel }: { channel: Channel | undefined }) {
 
   const handleUnsub = async () => {
     await axios.put(
-      `http://localhost:8000/api/users/unsub/${channel?._id}`,
+      `${serverURL}/api/users/unsub/${channel?._id}`,
       {},
       { withCredentials: true }
     );

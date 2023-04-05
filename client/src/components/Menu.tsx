@@ -19,6 +19,7 @@ import { RootState } from "../redux/store";
 import LogoMenu from "./LogoMenu";
 import axios from "axios";
 import { Channel } from "../utils/Types";
+import serverURL from "../utils/ServerURL";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSide};
@@ -129,7 +130,7 @@ function Menu({
   const fetchSubscriptions = async (user: string) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/users/subscriptions/${user}`,
+        `${serverURL}/api/users/subscriptions/${user}`,
         { withCredentials: true }
       );
       setSubs(res.data);
